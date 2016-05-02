@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import datetime
+import cPickle as pickle
 
 # Define event class
 class dogEvent(object):
@@ -9,12 +10,16 @@ class dogEvent(object):
         # LOL at the thought of storing JSON in MySQL at some point
         self.behaviors = behaviors
 
-# Instantiate new sample event
+# Write a new DogEvent() to a file based on some hard-coded values.
 newEvent = dogEvent(datetime.datetime.now(), "James", ["peed", "pooped", "ate", "bit me", "played"])
 
+# Today we learn about serialization
+pickle.dump(newEvent, open('log.txt','wb'))
+storedEvent = pickle.load( open( "log.txt", "rb" ) )
+
 # Begin output
-print "%s visited the puppy on %s at %s" % (newEvent.visitor, newEvent.time.strftime("%A, %B %d, %Y"), newEvent.time.strftime("%I:%M %p"))
-print "The puppy " + ', '.join([str(behavior) for behavior in newEvent.behaviors])
+print "%s visited the puppy on %s at %s" % (storedEvent.visitor, storedEvent.time.strftime("%A, %B %d, %Y"), storedEvent.time.strftime("%I:%M %p"))
+print "The puppy " + ', '.join([str(behavior) for behavior in storedEvent.behaviors])
 
 # Goals:
 # 1. Write a new DogEvent() to a file based on some hard-coded values.

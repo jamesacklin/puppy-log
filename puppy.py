@@ -23,6 +23,7 @@ def parseArgs():
     parser.add_argument("-v", "--visitor", help="The name of the person who visited the dog.")
     parser.add_argument("-b", "--behavior", help="Things the dog did.", nargs='+')
     args = parser.parse_args()
+    # TODO: enforce values for optional arguments without making them procedural, no clue how to do that but it's just me using this for now
     if args.visitor and args.behavior:
         for behavior in args.behavior:
             logEvent(datetime.datetime.now(), args.visitor, behavior)

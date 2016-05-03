@@ -15,13 +15,13 @@ S'James'
 p7
 sS'behavior'
 p8
-S'barked'
+S'peed'
 p9
 sS'time'
 p10
 cdatetime
 datetime
 p11
-(S"\x07\xe0\x05\x02\x17\x18'\x0b\xda\xb6"
+(S'\x07\xe0\x05\x02\x175\x05\x06\xe0K'
 tRp12
 sb.

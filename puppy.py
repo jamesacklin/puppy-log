@@ -1,29 +1,47 @@
 #!/usr/bin/python
 import datetime
 import cPickle as pickle
+import getopt, sys
 
 # Define event class
 class dogEvent(object):
-    def __init__(self, time, visitor, behaviors):
+    def __init__(self, time, visitor, behavior):
         self.time = time
         self.visitor = visitor
         # LOL at the thought of storing JSON in MySQL at some point
-        self.behaviors = behaviors
+        self.behavior = behavior
 
-# Write a new DogEvent() to a file based on some hard-coded values.
-newEvent = dogEvent(datetime.datetime.now(), "James", ["peed", "pooped", "ate", "bit me", "played"])
+def usage():
+    return "Learn how to use it!"
 
-# Today we learn about serialization
-pickle.dump(newEvent, open('log.txt','wb'))
-storedEvent = pickle.load( open( "log.txt", "rb" ) )
+def logEvent(time, visitor, behavior):
+    newEvent = dogEvent(time, visitor, behavior)
+    pickle.dump(newEvent, open("log.txt", "wb"))
+    storedEvent = pickle.load(open("log.txt", "rb"))
+    print "%s visited the puppy on %s at %s" % (storedEvent.visitor, storedEvent.time.strftime("%A, %B %d, %Y"), storedEvent.time.strftime("%I:%M %p"))
 
-# Begin output
-print "%s visited the puppy on %s at %s" % (storedEvent.visitor, storedEvent.time.strftime("%A, %B %d, %Y"), storedEvent.time.strftime("%I:%M %p"))
-print "The puppy " + ', '.join([str(behavior) for behavior in storedEvent.behaviors])
+def main(argv):
+    try:
+        opts, args = getopt.getopt(argv, "v:d")
+    except getopt.GetoptError:
+        print usage()
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt in ("-v"):
+            time = datetime.datetime.now()
+            behavior = "foo"
+            logEvent(time, arg, behavior)
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
+
+
+
+
 
 # Goals:
-# 1. Write a new DogEvent() to a file based on some hard-coded values.
-# 2. Read the last entry to the file back to me.
+# x 1. Write a new DogEvent() to a file based on some hard-coded values.
+# x 2. Read the last entry to the file back to me.
 # 3. Write a new DogEvent() to a file with command-line arguments.
 # 4. Write a new DogEvent() to a database with command-line arguments.
 # 5. Read the last databse entry back to me.

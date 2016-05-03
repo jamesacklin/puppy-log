@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import datetime
 import cPickle as pickle
-import getopt, sys
+import argparse
 
 # Define event class
 class dogEvent(object):
@@ -20,24 +20,14 @@ def logEvent(time, visitor, behavior):
     storedEvent = pickle.load(open("log.txt", "rb"))
     print "%s visited the puppy on %s at %s" % (storedEvent.visitor, storedEvent.time.strftime("%A, %B %d, %Y"), storedEvent.time.strftime("%I:%M %p"))
 
-def main(argv):
-    try:
-        opts, args = getopt.getopt(argv, "v:d")
-    except getopt.GetoptError:
-        print usage()
-        sys.exit(2)
-    for opt, arg in opts:
-        if opt in ("-v"):
-            time = datetime.datetime.now()
-            behavior = "foo"
-            logEvent(time, arg, behavior)
-
-if __name__ == "__main__":
-    main(sys.argv[1:])
-
-
-
-
+parser = argparse.ArgumentParser()
+parser.add_argument("--visitor", help="The name of the person who visited the dog.")
+parser.add_argument("--behavior", help="Things the dog did.")
+args = parser.parse_args()
+if args.visitor:
+    print args.visitor + " visited the dog."
+if args.behavior:
+    print "The dog " + args.behavior + "."
 
 # Goals:
 # x 1. Write a new DogEvent() to a file based on some hard-coded values.

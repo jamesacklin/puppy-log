@@ -8,31 +8,32 @@ class dogEvent(object):
     def __init__(self, time, visitor, behavior):
         self.time = time
         self.visitor = visitor
-        # LOL at the thought of storing JSON in MySQL at some point
         self.behavior = behavior
 
-def usage():
-    return "Learn how to use it!"
-
+# Creating a new event and logging it
 def logEvent(time, visitor, behavior):
     newEvent = dogEvent(time, visitor, behavior)
     pickle.dump(newEvent, open("log.txt", "wb"))
     storedEvent = pickle.load(open("log.txt", "rb"))
-    print "%s visited the puppy on %s at %s" % (storedEvent.visitor, storedEvent.time.strftime("%A, %B %d, %Y"), storedEvent.time.strftime("%I:%M %p"))
+    print "The puppy %s when %s visited the puppy on %s at %s" % (storedEvent.behavior, storedEvent.visitor, storedEvent.time.strftime("%A, %B %d, %Y"), storedEvent.time.strftime("%I:%M %p"))
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--visitor", help="The name of the person who visited the dog.")
-parser.add_argument("--behavior", help="Things the dog did.")
-args = parser.parse_args()
-if args.visitor:
-    print args.visitor + " visited the dog."
-if args.behavior:
-    print "The dog " + args.behavior + "."
+# Reading from the command line
+def parseArgs():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-v", "--visitor", help="The name of the person who visited the dog.")
+    parser.add_argument("-b", "--behavior", help="Things the dog did.", nargs='+')
+    args = parser.parse_args()
+    if args.visitor and args.behavior:
+        for behavior in args.behavior:
+            logEvent(datetime.datetime.now(), args.visitor, behavior)
+
+if __name__ == "__main__":
+    parseArgs()
 
 # Goals:
 # x 1. Write a new DogEvent() to a file based on some hard-coded values.
 # x 2. Read the last entry to the file back to me.
-# 3. Write a new DogEvent() to a file with command-line arguments.
+# x 3. Write a new DogEvent() to a file with command-line arguments.
 # 4. Write a new DogEvent() to a database with command-line arguments.
 # 5. Read the last databse entry back to me.
 # 6. Tell me the last time the dog went on a walk using a database.

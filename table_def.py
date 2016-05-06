@@ -6,7 +6,7 @@ from sqlalchemy import Column, Date, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 
-engine = create_engine('sqlite:///visits.db', echo=True)
+engine = create_engine('sqlite:///visits.db', echo=False)
 Base = declarative_base()
 
 class Visit(Base):
